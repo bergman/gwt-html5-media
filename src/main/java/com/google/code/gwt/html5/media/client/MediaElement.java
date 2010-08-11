@@ -26,6 +26,10 @@ public abstract class MediaElement extends Element {
     return (this.error == null) ? 0 : this.error;
   }-*/;
 
+  public final native String getCurrentSrc() /*-{
+    return this.getAttribute('currentSrc');
+  }-*/;
+
   public final native String getSrc() /*-{
     return this.getAttribute('src');
   }-*/;
