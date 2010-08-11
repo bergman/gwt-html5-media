@@ -29,8 +29,31 @@ public class Video extends Media {
     return VideoElement.create().canPlayType(type);
   }
 
+  /*
+   * Needed in GWT 2.0.3 because it kills unknown events. In 2.1 this isn't
+   * the case. There, any unknown events are sent along.
+   */
+  @Override
+  public void onBrowserEvent(Event event) {
+    DomEvent.fireNativeEvent(event, this, this.getElement());
+  }
+
+  public static Video wrap(VideoElement e) {
+    //assert Document.get().getBody().isOrHasChild(e);
+    Video v = new Video(e);
+    v.maybeInitMediaEvents();
+    // The two lines below seems to be good practice to avoid memory leaks...
+    v.onAttach();
+    RootPanel.detachOnWindowClose(v);
+    return v;
+  }
+
   public Video() {
     setElement(VideoElement.create());
+  }
+
+  private Video(VideoElement e) {
+    setElement(e);
   }
 
   public Video(String src) {
