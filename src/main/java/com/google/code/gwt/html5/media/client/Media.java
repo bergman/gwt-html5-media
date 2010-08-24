@@ -117,6 +117,15 @@ public abstract class Media extends Widget implements HasAbortHandlers,
     HasVolumeChangeHandlers, HasWaitingHandlers, HasAllMouseHandlers,
     HasClickHandlers {
 
+  /*
+   * Needed in GWT 2.0.3 because it kills unknown events. In 2.1 this isn't
+   * the case. There, any unknown events are sent along.
+   */
+  @Override
+  public void onBrowserEvent(Event event) {
+    DomEvent.fireNativeEvent(event, this, this.getElement());
+  }
+
   public MediaElement getElement() {
     return super.getElement().<MediaElement> cast();
   }
