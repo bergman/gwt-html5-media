@@ -30,8 +30,22 @@ public class Audio extends Media {
     return AudioElement.create().canPlayType(type);
   }
 
+  public static Audio wrap(AudioElement e) {
+    assert Document.get().getBody().isOrHasChild(e);
+    Audio a = new Audio(e);
+    a.maybeInitMediaEvents();
+    // The two lines below seems to be good practice to avoid memory leaks...
+    a.onAttach();
+    RootPanel.detachOnWindowClose(a);
+    return a;
+  }
+
   public Audio() {
     setElement(AudioElement.create());
+  }
+
+  private Audio(AudioElement e) {
+    setElement(e);
   }
 
   public Audio(String src) {
